@@ -6,6 +6,7 @@ define freeradius::statusclient (
   $port = undef,
   $shortname = $name,
   $netmask = undef,
+  $virtual_server = undef,
   $ensure = present,
 ) {
   $fr_package  = $::freeradius::params::fr_package
@@ -13,7 +14,9 @@ define freeradius::statusclient (
   $fr_basepath = $::freeradius::params::fr_basepath
   $fr_group    = $::freeradius::params::fr_group
 
-  file { "${fr_basepath}/statusclients.d/${name}.conf":
+  $filename = $name
+
+  file { "${fr_basepath}/statusclients.d/${filename}.conf":
     ensure  => $ensure,
     mode    => '0640',
     owner   => 'root',
