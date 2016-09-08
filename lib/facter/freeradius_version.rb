@@ -1,11 +1,25 @@
 # Grab the FreeRADIUS version from the output of radiusd -v
-Facter.add(:freeradius_version) do
-  setcode do
-    version = Facter::Core::Execution.exec('radiusd -v')
-    if !version.nil?
-      version = version.split(/\n/)[0].match(/FreeRADIUS Version (\d\.\d\.\d)/)[1].to_s
-    end
-    version
-  end
+
+# Set path to binary for our platform
+dist = Facter.value(:osfamily)
+case dist
+when /RedHat/
+  binary = 'radiusd'
+when /Debian/
+  binary = 'freeradius'
+else
+  binary = 'radiusd'
 end
 
+# Execute call to fetch version info
+version = Facter::Core::Execution.exec("#{binary} -v")
+
+# Extract full version number
+Facter.add(:freeradius_version) do
+  setcode do
+    if !version.nil?
+      minver = version.split(/\n/)[0].match(/FreeRADIUS Version (\d+\.\d+\.\d+)/)[1].to_s
+    end
+    minver
+  end
+end
