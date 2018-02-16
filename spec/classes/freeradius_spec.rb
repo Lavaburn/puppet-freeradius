@@ -234,7 +234,7 @@ describe 'freeradius' do
         'missingok'     => 'true',
         'path'          => '$freeradius::fr_logpath/radacct/*/*.log',
         'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'        => '7',
+        'rotate'        => 7,
         'rotate_every'  => 'day',
         'sharedscripts' => 'true'
       )
@@ -247,7 +247,7 @@ describe 'freeradius' do
         'missingok'     => 'true',
         'path'          => '$freeradius::fr_logpath/checkrad.log',
         'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'        => '1',
+        'rotate'        => 1,
         'rotate_every'  => 'week',
         'sharedscripts' => 'true'
       )
@@ -260,7 +260,7 @@ describe 'freeradius' do
         'missingok'     => 'true',
         'path'          => '$freeradius::fr_logpath/radius*.log',
         'postrotate'    => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'        => '26',
+        'rotate'        => 26,
         'rotate_every'  => 'week',
         'sharedscripts' => 'true'
       )
@@ -290,7 +290,7 @@ describe 'freeradius' do
   it do
     is_expected.to contain_exec('radiusd-config-test')
       .with(
-        'command'     => 'sudo radiusd -XC | grep 'Configuration appears to be OK.' | wc -l',
+        'command'     => 'sudo radiusd -XC | grep "Configuration appears to be OK." | wc -l',
         'logoutput'   => 'on_failure',
         'path'        => '[/bin/, /sbin/, /usr/bin/, /usr/sbin/]',
         'refreshonly' => 'true',
@@ -342,7 +342,7 @@ describe 'freeradius' do
   it do
     is_expected.to contain_syslog__rule('radiusd-log')
       .with(
-        'command' => 'if $programname == 'radiusd' then $freeradius::fr_logpath/radius.log\\n&~',
+        'command' => 'if $programname == "radiusd" then $freeradius::fr_logpath/radius.log\\n&~',
         'order'   => '12'
       )
   end

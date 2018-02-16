@@ -1,6 +1,4 @@
 require 'puppetlabs_spec_helper/rake_tasks'
-require 'puppet-lint/tasks/puppet-lint'
-require 'puppet-syntax/tasks/puppet-syntax'
 
 # These two gems aren't always present, for instance
 # on Travis with --without development
@@ -12,36 +10,36 @@ begin
 rescue LoadError
 end
 
-PuppetLint.configuration.relative = true
-PuppetLint.configuration.send("disable_80chars")
-PuppetLint.configuration.log_format = "%{path}:%{linenumber}:%{check}:%{KIND}:%{message}"
-PuppetLint.configuration.fail_on_warnings = true
-
-# Forsake support for Puppet 2.6.2 for the benefit of cleaner code.
-# http://puppet-lint.com/checks/class_parameter_defaults/
-PuppetLint.configuration.send('disable_class_parameter_defaults')
-# http://puppet-lint.com/checks/class_inherits_from_params_class/
-PuppetLint.configuration.send('disable_class_inherits_from_params_class')
-
-exclude_paths = [
-    "pkg/**/*",
-    "vendor/**/*",
-    "spec/**/*",
+exclude_dirs = [
+  "pkg/**/*",
+  "spec/**/*",
+  "vendor/**/*",
 ]
-PuppetLint.configuration.ignore_paths = exclude_paths
-PuppetSyntax.exclude_paths = exclude_paths
 
-task :metadata do
-  sh "metadata-json-lint metadata.json"
+PuppetLint::RakeTask.new :lint do |config|
+  config.ignore_paths = exclude_dirs
+  config.disable_checks = [
+    "80chars", "140chars", 
+    "variable_is_lowercase", "class_inherits_from_params_class",
+    "relative_classname_inclusion", "trailing_comma",
+    "variable_contains_upcase", "version_comparison",
+    "variable_is_lowercase", "arrow_on_right_operand_line"
+  ] # TODO
+
+  config.with_context = true
+  config.relative = true
 end
+
+PuppetSyntax.exclude_paths = exclude_dirs
 
 desc "Run syntax, lint, and spec tests."
 task :test => [
-         :syntax,
-         :lint,
-         :spec,
-         :metadata,
-     ]
+  :syntax,
+  :metadata_lint,
+  :lint,
+  :spec,
+]
+
 def io_popen(command)
   IO.popen(command) do |io|
     io.each do |line|

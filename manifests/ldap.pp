@@ -10,10 +10,10 @@ define freeradius::ldap (
   $probes      = 3,
   $interval    = 3,
   $timeout     = 10,
-  $start       = '${thread[pool].start_servers}',
-  $min         = '${thread[pool].min_spare_servers}',
-  $max         = '${thread[pool].max_servers}',
-  $spare       = '${thread[pool].max_spare_servers}',
+  $start       = '${thread[pool].start_servers}',     # lint:ignore:single_quote_string_with_variables
+  $min         = '${thread[pool].min_spare_servers}', # lint:ignore:single_quote_string_with_variables
+  $max         = '${thread[pool].max_servers}',       # lint:ignore:single_quote_string_with_variables
+  $spare       = '${thread[pool].max_spare_servers}', # lint:ignore:single_quote_string_with_variables
   $ensure      = 'present',
   $starttls    = 'no',
   $cafile      = undef,

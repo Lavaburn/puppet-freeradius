@@ -80,7 +80,7 @@ describe 'freeradius::sql' do
         'missingok'    => 'true',
         'path'         => '$::osfamily ? { RedHat => /var/log/radius, Debian => /var/log/freeradius, default => /var/log/radius }/${logdir}/sqltrace.sql',
         'postrotate'   => 'kill -HUP `cat /var/run/radiusd/radiusd.pid`',
-        'rotate'       => '1',
+        'rotate'       => 1,
         'rotate_every' => 'week'
       )
   end

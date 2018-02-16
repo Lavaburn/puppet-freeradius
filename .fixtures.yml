@@ -1,8 +1,16 @@
 fixtures:
     symlinks:
       freeradius: "#{source_dir}"
-    repositories:
-      stdlib:
-        repo: https://github.com/puppetlabs/puppetlabs-stdlib.git
-        ref: 4.3.2
     forge_modules:
+      concat:
+        repo: "puppetlabs/concat"
+        ref: "4.1.1"
+      firewall:
+        repo: "puppetlabs/firewall"
+        ref: "1.8.1"
+      logrotate:
+        repo: "puppet/logrotate"
+        ref: "3.2.0"
+      stdlib:
+        repo: "puppetlabs/stdlib"
+        ref: "4.20.0"

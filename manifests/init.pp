@@ -134,7 +134,7 @@ class freeradius (
   }
 
   # Install default attribute filters
-  concat::fragment { "attr-default":
+  concat::fragment { 'attr-default':
     target  => "${freeradius::fr_modulepath}/attr_filter",
     content => template("freeradius/attr_default.fr${freeradius::fr_version}.erb"),
     order   => 10,
@@ -205,12 +205,15 @@ class freeradius (
   # We don't want to create the radiusd user, just add it to the
   # wbpriv group if the user needs winbind support. We depend on
   # the FreeRADIUS package to be sure that the user has been created
+  if ($winbind_support) {
+    $fr_user_groups = $freeradius::fr_wbpriv_user
+  } else {
+    $fr_user_groups = undef
+  }
+
   user { $freeradius::fr_user:
     ensure  => present,
-    groups  => $winbind_support ? {
-      true    => $freeradius::fr_wbpriv_user,
-      default => undef,
-    },
+    groups  => $fr_user_groups,
     require => Package[$freeradius::fr_package],
   }
 
@@ -255,7 +258,7 @@ class freeradius (
   logrotate::rule { 'radacct':
     path          => "${freeradius::fr_logpath}/radacct/*/*.log",
     rotate_every  => 'day',
-    rotate        => '7',
+    rotate        => 7,
     create        => false,
     missingok     => true,
     compress      => true,
@@ -266,7 +269,7 @@ class freeradius (
   logrotate::rule { 'checkrad':
     path          => "${freeradius::fr_logpath}/checkrad.log",
     rotate_every  => 'week',
-    rotate        => '1',
+    rotate        => 1,
     create        => true,
     missingok     => true,
     compress      => true,
@@ -277,7 +280,7 @@ class freeradius (
   logrotate::rule { 'radiusd':
     path          => "${freeradius::fr_logpath}/radius*.log",
     rotate_every  => 'week',
-    rotate        => '26',
+    rotate        => 26,
     create        => true,
     missingok     => true,
     compress      => true,

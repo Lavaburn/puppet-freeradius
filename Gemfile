@@ -1,27 +1,30 @@
 source "https://rubygems.org"
 
 group :test do
-    gem "rake"
-    gem "puppet", ENV['PUPPET_VERSION'] || '~> 3.8.3'
-    gem "rspec-puppet", :git => 'https://github.com/rodjek/rspec-puppet.git'
-    gem "puppetlabs_spec_helper"
-    gem 'rspec-puppet-utils', :git => 'https://github.com/Accuity/rspec-puppet-utils.git'
-    gem 'hiera-puppet-helper', :git => 'https://github.com/bobtfish/hiera-puppet-helper.git'
-    gem "metadata-json-lint"
-    gem 'puppet-syntax'
-    gem 'puppet-lint'
+	gem "metadata-json-lint"
+		
+	gem "puppet", ENV['PUPPET_VERSION'] || '~> 4.8.1'
+	gem "puppetlabs_spec_helper"
 end
 
-group :integration do
-    gem "beaker", :git => 'https://github.com/puppetlabs/beaker.git'
-    gem "beaker-rspec", :git => 'https://github.com/puppetlabs/beaker-rspec.git'
-    gem "vagrant-wrapper"
-    gem 'serverspec'
+group :integration do	
+	# Version pinning for older Ruby versions	
+	if RUBY_VERSION < '2.0.0'	
+		gem 'beaker', '~> 2.52'
+	else 
+		gem 'beaker', '~> 3.13.0' # rubocop:disable Bundler/DuplicatedGem
+	end
+	
+	gem "vagrant-wrapper"
+
+	gem 'beaker-puppet_install_helper', '~> 0.7.1'
+	gem 'beaker-rspec'
 end
 
 group :development do
     gem "travis"
     gem "travis-lint"
     gem "puppet-blacksmith"
-    gem "guard-rake"
+    
+	gem "guard-rake" if RUBY_VERSION >= '2.2.5'
 end

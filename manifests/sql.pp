@@ -5,8 +5,8 @@ define freeradius::sql (
   $server = 'localhost',
   $login = 'radius',
   $radius_db = 'radius',
-  $num_sql_socks = '${thread[pool].max_servers}',
-  $query_file = 'sql/${database}/dialup.conf',
+  $num_sql_socks = '${thread[pool].max_servers}', # lint:ignore:single_quote_string_with_variables
+  $query_file = 'sql/${database}/dialup.conf',    # lint:ignore:single_quote_string_with_variables
   $custom_query_file = false,
   $lifetime = '0',
   $max_queries = '0',
@@ -21,7 +21,7 @@ define freeradius::sql (
   $usergroup_table = 'radusergroup',
   $deletestalesessions = 'yes',
   $sqltrace = 'no',
-  $sqltracefile = '${logdir}/sqllog.sql',
+  $sqltracefile = '${logdir}/sqllog.sql', # lint:ignore:single_quote_string_with_variables
   $connect_failure_retry_delay = '60',
   $nas_table = 'nas',
   $read_groups = 'yes',
