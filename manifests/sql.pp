@@ -88,11 +88,7 @@ define freeradius::sql (
 
   # Install custom query file
   if ($custom_query_file != false) {
-    $custom_query_file_path = "${fr_moduleconfigpath}/${name}-queries.conf"
-
-    ::freeradius::config { "${name}-queries.conf":
-      source => $custom_query_file,
-    }
+    $custom_query_file_path = $custom_query_file
   }
 
   # Generate a module config, based on sql.conf
